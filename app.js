@@ -3,9 +3,12 @@
 
 let activeCategories = new Set();
 let searchQuery = "";
+let recentOnly = false;
 let sortColumn = "last";
 let sortDir = "desc";
 let expandedId = null;
+
+const RECENT_WINDOW_DAYS = 90;
 
 // ---------- Date helpers ----------
 
@@ -133,11 +136,15 @@ function representativeHistory(company) {
   return [...groups[keys[0]]].sort((a, b) => a.date.localeCompare(b.date));
 }
 
-function sparklinePrices(numericEntries) {
+// Each point carries its price plus a hover label, so the sparkline can
+// show real dates/prices on hover instead of being decorative-only.
+function sparklinePointData(numericEntries, currency) {
   const points = [];
   for (const h of numericEntries) {
-    if (points.length === 0 || points[points.length - 1] !== h.oldPrice) points.push(h.oldPrice);
-    points.push(h.newPrice);
+    if (points.length === 0 || points[points.length - 1].price !== h.oldPrice) {
+      points.push({ price: h.oldPrice, label: `Before ${formatDateNice(parseLocalDate(h.date))}: ${formatMoney(h.oldPrice, currency)}` });
+    }
+    points.push({ price: h.newPrice, label: `${formatDateNice(parseLocalDate(h.date))}: ${formatMoney(h.newPrice, currency)}` });
   }
   return points;
 }
@@ -249,7 +256,7 @@ function companyStats(company) {
     lastChangePct: isLastEventNumeric ? ((lastFullDelta.newPrice - lastFullDelta.oldPrice) / lastFullDelta.oldPrice) * 100 : null,
     trackedSinceDate: earliestWithPrice?.date || null,
     sinceTrackedPct,
-    sparklinePoints: sparklinePrices(repFullDelta),
+    sparklinePoints: sparklinePointData(repFullDelta, currency),
   };
 }
 
@@ -274,14 +281,15 @@ function sparklineSvg(points) {
     // Not enough data for a trend yet — a quiet placeholder, not a
     // dashed "in progress" line (dashing reads as a threshold/projection,
     // which this isn't).
-    return `<svg class="sparkline" viewBox="0 0 ${w} ${h}"><line x1="${pad}" y1="${h / 2}" x2="${w - pad}" y2="${h / 2}" stroke="currentColor" stroke-width="1.5" opacity="0.25"/><circle cx="${w / 2}" cy="${h / 2}" r="2.5" fill="currentColor" opacity="0.5"/></svg>`;
+    return `<svg class="sparkline" viewBox="0 0 ${w} ${h}"><title>Not enough tracked history for a trend yet</title><line x1="${pad}" y1="${h / 2}" x2="${w - pad}" y2="${h / 2}" stroke="currentColor" stroke-width="1.5" opacity="0.25"/><circle cx="${w / 2}" cy="${h / 2}" r="2.5" fill="currentColor" opacity="0.5"/></svg>`;
   }
 
-  const min = Math.min(...points), max = Math.max(...points);
+  const prices = points.map(p => p.price);
+  const min = Math.min(...prices), max = Math.max(...prices);
   const range = max - min || 1;
   const n = points.length;
   const step = (w - pad * 2) / (n - 1);
-  const coords = points.map((p, i) => [
+  const coords = prices.map((p, i) => [
     pad + i * step,
     h - pad - ((p - min) / range) * (h - pad * 2),
   ]);
@@ -294,17 +302,27 @@ function sparklineSvg(points) {
     d += ` C ${midX.toFixed(1)} ${y0.toFixed(1)}, ${midX.toFixed(1)} ${y1.toFixed(1)}, ${x1.toFixed(1)} ${y1.toFixed(1)}`;
   }
 
-  const trendUp = points[n - 1] > points[0];
-  const trendDown = points[n - 1] < points[0];
+  const trendUp = prices[n - 1] > prices[0];
+  const trendDown = prices[n - 1] < prices[0];
   const color = trendUp ? "var(--bad)" : trendDown ? "var(--good)" : "var(--text-faint)";
   const [endX, endY] = coords[n - 1];
   const areaPath = `${d} L ${coords[n - 1][0].toFixed(1)} ${h - pad} L ${coords[0][0].toFixed(1)} ${h - pad} Z`;
+
+  // A larger, invisible hit-circle per point carries a native <title> —
+  // the simplest possible hover tooltip (no custom positioning JS), at
+  // the cost of looking like the OS's plain tooltip rather than a
+  // themed one. Good enough for a decorative chart with a hover bonus.
+  const hitDots = points.map((p, i) => {
+    const [x, y] = coords[i];
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7" fill="transparent" pointer-events="all" class="sparkline-hit"><title>${escapeHtml(p.label)}</title></circle>`;
+  }).join("");
 
   return `
     <svg class="sparkline" viewBox="0 0 ${w} ${h}">
       <path d="${areaPath}" fill="${color}" opacity="0.12" stroke="none"/>
       <path d="${d}" fill="none" stroke="${color}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
       <circle cx="${endX.toFixed(1)}" cy="${endY.toFixed(1)}" r="2.75" fill="${color}" stroke="var(--card)" stroke-width="1.5"/>
+      ${hitDots}
     </svg>
   `;
 }
@@ -696,10 +714,18 @@ function renderTable() {
     .filter(c => !searchQuery || c.name.toLowerCase().includes(searchQuery));
 
   const avgs = categoryAverages();
-  const entries = companies.map(c => {
+  let entries = companies.map(c => {
     const stats = companyStats(c);
     return { company: c, stats, freq: hikeCadenceInfo(c), catAvgPct: categoryAvgPct(c, stats, avgs) };
-  }).sort(compareEntries);
+  });
+
+  if (recentOnly) {
+    const cutoff = todayMidnight();
+    cutoff.setDate(cutoff.getDate() - RECENT_WINDOW_DAYS);
+    entries = entries.filter(e => e.stats.hasHistory && parseLocalDate(e.stats.lastEvent.date) >= cutoff);
+  }
+
+  entries.sort(compareEntries);
 
   updateSortHeaderIndicators();
 
@@ -792,6 +818,12 @@ function renderDetailContent(company) {
 
 document.getElementById("companySearch").addEventListener("input", (e) => {
   searchQuery = e.target.value.trim().toLowerCase();
+  renderTable();
+});
+
+document.getElementById("recentFilterBtn").addEventListener("click", (e) => {
+  recentOnly = !recentOnly;
+  e.currentTarget.classList.toggle("active", recentOnly);
   renderTable();
 });
 

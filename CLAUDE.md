@@ -56,6 +56,8 @@ showing:
   precise numbers already live in the columns beside it, so this chart's
   only job is to be a pleasant at-a-glance shape — see the "sparkline
   redesign" note in `app.js` above `sparklineSvg()` for the reasoning.
+  Hovering any point on the line shows its real date and price (a native
+  SVG `<title>` on an invisible hit-circle — no custom tooltip JS).
 
 Each row's logo is fetched live from the company's own domain via a
 public favicon service (`logoUrl()` in `app.js`) — not a hosted image
@@ -64,7 +66,17 @@ underneath shows through automatically.
 
 The **#** and **Company** columns are frozen (`position: sticky`) so
 they stay in view while you scroll horizontally through the rest of the
-(wide) table — you never lose track of which row you're looking at.
+(wide) table — you never lose track of which row you're looking at. The
+column **header row** is also frozen while scrolling vertically, pinned
+just below the topbar (`top: 71px`, matching the topbar's actual height
+— sticking it at `top: 0` would tuck it directly behind the topbar
+instead of below it, since both are sticky at the same position and the
+topbar has the higher z-index).
+
+A **"🔥 Changed in last 90 days"** button next to the search box quick-
+filters the board down to companies with a tracked change inside that
+window — a fast way to check "what's actually moved lately" without
+sorting the whole table.
 
 Above the table, a **highlights strip** surfaces a few "headlines" from
 the whole catalog regardless of the current filter/search — the biggest
@@ -137,10 +149,14 @@ standalone project once it grew past that scope.
     entry (and the same cell-renderer functions above) to build the
     desktop `<tr>` and the mobile card — kept in sync by construction
     rather than by two independently-maintained templates.
+  - `sparklinePointData()` pairs each price with a hover label (date +
+    formatted price); `sparklineSvg()` draws an invisible, `<title>`-
+    bearing hit-circle over every point for the hover tooltip.
   - Sortable column headers (click to sort by Price / Change % / Since
     Tracked / Hike Frequency / vs Category Avg / Company name), category
-    filter chips, search, and a light/dark theme toggle. No currency
-    conversion — see the Price bullet above for why.
+    filter chips, search, a "changed in last 90 days" quick filter
+    (`recentOnly` / `RECENT_WINDOW_DAYS`), and a light/dark theme toggle.
+    No currency conversion — see the Price bullet above for why.
 - `style.css` — full-width table layout; dark theme is the base `:root`,
   light theme overrides live under `:root[data-theme="light"]`.
 
