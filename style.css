@@ -257,7 +257,14 @@ body {
 .board-table {
   width: 100%;
   min-width: 1440px;
-  border-collapse: collapse;
+  /* separate, not collapse: position:sticky on <th> combined with
+     border-collapse:collapse is a known browser bug — the sticky header
+     row's height can collapse to 0 while its content still paints,
+     overlapping row 1 instead of sitting above it. All borders here are
+     horizontal-only (border-bottom), so separate + zero spacing looks
+     identical without the sticky bug. */
+  border-collapse: separate;
+  border-spacing: 0;
   font-size: 0.88rem;
 }
 
