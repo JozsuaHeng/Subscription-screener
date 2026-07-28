@@ -67,19 +67,25 @@ underneath shows through automatically.
 The **#** and **Company** columns are frozen (`position: sticky`) so
 they stay in view while you scroll horizontally through the rest of the
 (wide) table — you never lose track of which row you're looking at. The
-column **header row** is also frozen while scrolling vertically. This
-took two attempts: the first (`top: 71px` on the `<th>`s, relying on the
-whole page to scroll) hit a real browser bug — `position: sticky` on a
-table cell whose scrolling ancestor is *ambiguous* (an element with
-`overflow-x: auto` but no explicit `overflow-y`/height) can collapse
-that row's height to 0 while still painting its content, overlapping
-row 1 instead of sitting above it. The fix was to make `.table-scroll`
-a deliberate, bounded scroll container (`max-height: 70vh; overflow-y:
-auto`) rather than an implicit one — confirmed by screenshot-testing
-several other candidate fixes (border-collapse, sticky-on-`<tr>` instead
-of `<th>`, disabling the frozen columns) that did *not* work before
-landing on this one. `top: 0` now means "top of the table's own
-scrollport," not the page.
+column **header row** is also frozen while scrolling vertically.
+
+There is deliberately only **one scrollbar for the whole site** —
+`.table-scroll` has no `overflow`/`max-height` of its own, so the page
+(`html`/`body`) is the only scroll container, for both the vertical
+scroll through all the rows and the horizontal scroll through the wide
+table on narrower screens. An earlier version gave `.table-scroll` its
+own bounded box (`max-height: 70vh; overflow-y: auto`) to route around a
+real browser bug: `position: sticky` on a table cell whose scrolling
+ancestor is *ambiguous* (an element with `overflow-x: auto` but no
+explicit `overflow-y`/height) can collapse that row's height to 0 while
+still painting its content, overlapping row 1 instead of sitting above
+it. That worked, but it meant two independent scrollbars on the page at
+once — one for the site, one just for the table — which felt wrong.
+Removing all overflow from `.table-scroll` sidesteps the bug a different
+way: with no ambiguous scroll container at all, the sticky `<th>`s just
+work against the true page scroll, `top: 71px` (the topbar's height, so
+the header row clears the sticky topbar above it instead of hiding under
+it).
 
 A **"🔥 Changed in last 90 days"** button next to the search box quick-
 filters the board down to companies with a tracked change inside that

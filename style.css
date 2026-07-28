@@ -247,18 +247,12 @@ body {
 
 /* ---------- Table ---------- */
 
-/* overflow-y:auto + max-height are load-bearing, not just a nicety: a
-   sticky <th> inside a table whose scrolling ancestor is ambiguous (an
-   element with overflow-x:auto but no explicit overflow-y/height) hits a
-   real browser bug where the sticky header row's height collapses to 0
-   and its content paints on top of row 1 instead of above it. Making
-   this a deliberate, bounded scroll container — not just an implicit
-   one — is what fixes it (confirmed by screenshot-testing several other
-   candidate fixes that didn't work). */
+/* No overflow/max-height here on purpose: the page itself is the only
+   scroll container, for both axes. (An earlier version made this its own
+   bounded overflow-y:auto box to dodge a sticky-header bug — see the note
+   above thead th below for why that's no longer needed, and why this is
+   what keeps the site down to one single scrollbar instead of two.) */
 .table-scroll {
-  overflow-x: auto;
-  overflow-y: auto;
-  max-height: 70vh;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
@@ -278,14 +272,22 @@ body {
   font-size: 0.88rem;
 }
 
-/* top: 0 here means "top of .table-scroll's own scrollport" — that
-   container has its own bounded height + overflow-y:auto (see above),
-   so this sticks to the top of the table itself, not the page. It does
-   NOT need to account for the topbar, because .table-scroll starts
-   below the topbar already. */
+/* top: 71px (the topbar's own height) because .table-scroll is no longer
+   its own scroll container (see above) — this sticks relative to the
+   page's true scroll now, so it has to clear the sticky topbar itself
+   rather than starting at the very top of the viewport. The earlier
+   version of this rule used top:0 inside a bounded .table-scroll box to
+   route around a real browser bug: position:sticky on a <th> whose
+   scrolling ancestor is *ambiguous* (overflow-x:auto but no explicit
+   overflow-y/height) can collapse the header row's height to 0 while its
+   content still paints, overlapping row 1. Removing overflow from
+   .table-scroll entirely removes that ambiguity in the first place — the
+   page is unambiguously the only scroll container — so the bug doesn't
+   apply here and top:71px is safe (confirmed via screenshot at a narrow
+   width forcing horizontal overflow: header renders cleanly, no overlap). */
 .board-table thead th {
   position: sticky;
-  top: 0;
+  top: 71px;
   z-index: 3;
   background: var(--bg-raised);
   text-align: left;
