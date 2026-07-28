@@ -67,11 +67,19 @@ underneath shows through automatically.
 The **#** and **Company** columns are frozen (`position: sticky`) so
 they stay in view while you scroll horizontally through the rest of the
 (wide) table — you never lose track of which row you're looking at. The
-column **header row** is also frozen while scrolling vertically, pinned
-just below the topbar (`top: 71px`, matching the topbar's actual height
-— sticking it at `top: 0` would tuck it directly behind the topbar
-instead of below it, since both are sticky at the same position and the
-topbar has the higher z-index).
+column **header row** is also frozen while scrolling vertically. This
+took two attempts: the first (`top: 71px` on the `<th>`s, relying on the
+whole page to scroll) hit a real browser bug — `position: sticky` on a
+table cell whose scrolling ancestor is *ambiguous* (an element with
+`overflow-x: auto` but no explicit `overflow-y`/height) can collapse
+that row's height to 0 while still painting its content, overlapping
+row 1 instead of sitting above it. The fix was to make `.table-scroll`
+a deliberate, bounded scroll container (`max-height: 70vh; overflow-y:
+auto`) rather than an implicit one — confirmed by screenshot-testing
+several other candidate fixes (border-collapse, sticky-on-`<tr>` instead
+of `<th>`, disabling the frozen columns) that did *not* work before
+landing on this one. `top: 0` now means "top of the table's own
+scrollport," not the page.
 
 A **"🔥 Changed in last 90 days"** button next to the search box quick-
 filters the board down to companies with a tracked change inside that
