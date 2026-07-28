@@ -181,14 +181,25 @@ favicon service by domain — display polish, not data. If that ever feels
 like the wrong tradeoff, the fallback is already there: remove the
 `<img>` and every row's colored-initial avatar carries on unchanged.)
 
-Instead, the dataset is refreshed **on request**: when asked to "update
-the price tracker" (or similar), research current price-change news (and
-any newly-requested companies) and edit `data.js` — always with a real
-source URL, never invented numbers, and never inventing a specific
-forecast date that wasn't actually reported. There is no automatic/
-scheduled refresh; this was a deliberate choice over a cron-scheduled
-agent or a real scraper backend, both heavier, ongoing-maintenance
-commitments.
+The dataset can also be refreshed **on request** at any time: ask to
+"update the price tracker" (or similar) and research current price-
+change news (and any newly-requested companies), editing `data.js` —
+always with a real source URL, never invented numbers, and never
+inventing a specific forecast date that wasn't actually reported.
+
+There's also a **monthly scheduled cloud agent** ("SubScreener Monthly
+Price Refresh", routine `trig_01KaEq6wwjCBqS8MaxbGRo6s`) that runs on
+the 1st of every month, does a bounded/broad price-change search (not a
+full 72-company re-research — that's too many searches for one run),
+and — only if it finds genuine sourced changes — commits them to a new
+`price-refresh-YYYY-MM` branch and pushes *that branch only*. It never
+pushes to or merges `main`, and never opens a PR; a human reviews the
+branch and merges manually. This was a deliberate middle ground: fully
+automatic (research + commit + push straight to `main`, no review) felt
+too risky for unattended monthly runs where a bad source could go live
+unnoticed, and a real scraper backend is a much bigger, ongoing-
+maintenance commitment than either of these. Manage/inspect the routine
+at https://claude.ai/code/routines.
 
 ## Refreshing / extending the dataset later
 
