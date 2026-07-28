@@ -1,0 +1,15 @@
+# macOS clutter
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Dependencies (in case this project ever adds tooling)
+node_modules/
+
+# Secrets / local env files
+.env
+.env.local
+
+# Claude Code local settings (personal, not shared)
+.claude/settings.local.json
