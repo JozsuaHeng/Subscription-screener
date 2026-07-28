@@ -69,23 +69,28 @@ they stay in view while you scroll horizontally through the rest of the
 (wide) table — you never lose track of which row you're looking at. The
 column **header row** is also frozen while scrolling vertically.
 
-There is deliberately only **one scrollbar for the whole site** —
-`.table-scroll` has no `overflow`/`max-height` of its own, so the page
-(`html`/`body`) is the only scroll container, for both the vertical
-scroll through all the rows and the horizontal scroll through the wide
-table on narrower screens. An earlier version gave `.table-scroll` its
-own bounded box (`max-height: 70vh; overflow-y: auto`) to route around a
-real browser bug: `position: sticky` on a table cell whose scrolling
-ancestor is *ambiguous* (an element with `overflow-x: auto` but no
-explicit `overflow-y`/height) can collapse that row's height to 0 while
-still painting its content, overlapping row 1 instead of sitting above
-it. That worked, but it meant two independent scrollbars on the page at
-once — one for the site, one just for the table — which felt wrong.
-Removing all overflow from `.table-scroll` sidesteps the bug a different
-way: with no ambiguous scroll container at all, the sticky `<th>`s just
-work against the true page scroll, `top: 71px` (the topbar's height, so
-the header row clears the sticky topbar above it instead of hiding under
-it).
+There is deliberately only **one *vertical* scrollbar for the whole
+site** (the page itself) — but the wide table still scrolls
+*horizontally* within its own box, not the page, so scrolling sideways
+to see later columns never drags the topbar/search/chips off-screen with
+it. This is `.table-scroll`: `overflow-x: auto` (so the table itself
+scrolls sideways) plus `overflow-y: hidden` with **no** height/max-height
+of its own, so it always grows to fit every row — nothing is ever
+actually clipped vertically, that axis is just pinned to a non-`visible`
+value so the browser doesn't treat this box as an *ambiguous* scrolling
+ancestor. That ambiguity (an element with `overflow-x: auto` but
+`overflow-y` left at the default `visible`, which the CSS overflow spec
+silently force-promotes to `auto` too) is what caused a real, confirmed
+browser bug earlier in this project: `position: sticky` on a `<th>`
+inside an ambiguous scrolling ancestor can collapse that row's height to
+0 while still painting its content, overlapping row 1 instead of sitting
+above it. Making both axes explicit (`auto` + `hidden`, never one left
+implicit) avoids that. Because `.table-scroll` is a real (if invisibly
+so) scroll container again, `top: 0` on `thead th` means "top of the
+table's own box," not the page — and the **frozen `#`/Company columns**
+(`left: 0` sticky) pin correctly against *this* box's horizontal scroll
+too, which is exactly what keeps them in view while scrolling sideways
+through the rest of the table.
 
 A **"🔥 Changed in last 90 days"** button next to the search box quick-
 filters the board down to companies with a tracked change inside that
