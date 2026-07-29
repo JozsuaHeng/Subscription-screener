@@ -8,7 +8,7 @@ A stock-screener-style price board for subscription services — because prices 
 
 ## What it does
 
-SubScreener tracks ~72 well-known subscription companies (streaming, music, software, AI tools, gaming, fitness, and more) in one sortable, filterable table:
+SubScreener tracks 100 well-known subscription companies (streaming, music, software, AI tools, gaming, fitness, dating, and more) in one sortable, filterable table:
 
 - **Per-tier pricing** — every plan a company offers (ad-supported, ad-free, family, etc.), monthly and annual, side by side
 - **Real price-change history** — every hike is sourced with a link to where it was reported, never guessed

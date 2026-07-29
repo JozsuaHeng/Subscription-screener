@@ -147,9 +147,9 @@ const SUBSCRIPTION_CATALOG = [
   {
     id: "sling-tv", name: "Sling TV", category: "Live TV", domain: "sling.com",
     priceHistory: [
-      { date: "2026-01-01", planLabel: "Orange", oldPrice: null, newPrice: 45.99, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" },
-      { date: "2026-01-01", planLabel: "Blue", oldPrice: null, newPrice: 45.99, currency: "USD", note: "", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" },
-      { date: "2026-01-01", planLabel: "Orange & Blue", oldPrice: null, newPrice: 60.99, currency: "USD", note: "", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" }
+      { date: "2026-01-01", planLabel: "Orange", oldPrice: null, newPrice: 45.99, currency: "USD", note: "Current reference price. No confirmed prior change found. Unaffected by the Feb 2026 hike below.", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" },
+      { date: "2026-02-20", planLabel: "Blue", oldPrice: 45.99, newPrice: 49.99, currency: "USD", note: "Existing customers saw it on their first bill after Feb 20, 2026; new customers immediately.", source: "https://www.tomsguide.com/entertainment/sling-tv/sling-tv-is-getting-a-price-hike-with-no-rhyme-or-reason-and-what-youll-pay-next-month-depends-on-where-you-live" },
+      { date: "2026-02-20", planLabel: "Orange & Blue", oldPrice: 60.99, newPrice: 64.99, currency: "USD", note: "Same increase as the Blue-only plan.", source: "https://www.tomsguide.com/entertainment/sling-tv/sling-tv-is-getting-a-price-hike-with-no-rhyme-or-reason-and-what-youll-pay-next-month-depends-on-where-you-live" }
     ]
   },
   {
@@ -162,8 +162,8 @@ const SUBSCRIPTION_CATALOG = [
   {
     id: "fubotv", name: "fuboTV", category: "Live TV", domain: "fubo.tv",
     priceHistory: [
-      { date: "2026-01-01", planLabel: "Fubo Sports", oldPrice: null, newPrice: 64.99, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" },
-      { date: "2026-01-01", planLabel: "Pro", oldPrice: null, newPrice: 73.99, currency: "USD", note: "", source: "https://www.fubo.tv/stream/compare/fubo-vs-sling/" }
+      { date: "2026-07-01", planLabel: "Fubo Sports", oldPrice: 55.99, newPrice: 64.99, currency: "USD", note: "Increase tied to Fubo's renewed NBCUniversal carriage deal (restoring NBC/Telemundo/Bravo); date approximate, rolled out gradually through summer 2026.", source: "https://awfulannouncing.com/fubo/raises-prices-nbcuniversal-carriage-deal.html" },
+      { date: "2026-07-01", planLabel: "Pro", oldPrice: 73.99, newPrice: 88.99, currency: "USD", note: "The source confirms \"most plans\" rose $15/mo under the new NBCUniversal deal ($73.99 + $15 = $88.99); it doesn't name the Pro plan specifically. Date approximate, rolled out gradually through summer 2026.", source: "https://awfulannouncing.com/fubo/raises-prices-nbcuniversal-carriage-deal.html" }
     ]
   },
   {
@@ -272,7 +272,8 @@ const SUBSCRIPTION_CATALOG = [
   {
     id: "chatgpt-plus", name: "ChatGPT Plus", category: "AI Tools", domain: "openai.com",
     priceHistory: [
-      { date: "2026-01-01", planLabel: "Plus", oldPrice: null, newPrice: 20, currency: "USD", note: "Current reference price. Has held at $20/mo since its Feb 2023 launch, as far as could be confirmed here.", source: "https://aipricecompare.org/" }
+      { date: "2026-01-01", planLabel: "Plus", oldPrice: null, newPrice: 20, currency: "USD", note: "Current reference price. Has held at $20/mo since its Feb 2023 launch, as far as could be confirmed here.", source: "https://aipricecompare.org/" },
+      { date: "2026-04-09", planLabel: "Pro ($100/mo)", oldPrice: null, newPrice: 100, currency: "USD", note: "New tier launched between the existing $20 Plus plan and OpenAI's separate $200 Pro plan, aimed at heavier Codex users (5x Plus's usage allowance). Base Plus price unchanged.", source: "https://techcrunch.com/2026/04/09/chatgpt-pro-plan-100-month-codex/" }
     ]
   },
   {
@@ -536,8 +537,8 @@ const SUBSCRIPTION_CATALOG = [
   {
     id: "sams-club", name: "Sam's Club", category: "Membership", domain: "samsclub.com",
     priceHistory: [
-      { date: "2026-05-01", planLabel: "Club", oldPrice: null, newPrice: 60, currency: "USD", note: "Increased effective May 1, 2026; prior price not confirmed in this research pass.", source: "https://thekrazycouponlady.com/tips/money/sams-club-membership-cost" },
-      { date: "2026-05-01", planLabel: "Plus", oldPrice: null, newPrice: 120, currency: "USD", note: "Increased effective May 1, 2026; prior price not confirmed in this research pass.", source: "https://thekrazycouponlady.com/tips/money/sams-club-membership-cost" }
+      { date: "2026-05-01", planLabel: "Club", oldPrice: 50, newPrice: 60, currency: "USD", note: "First Sam's Club fee hike since 2022.", source: "https://www.cnbc.com/2026/04/01/sam.html" },
+      { date: "2026-05-01", planLabel: "Plus", oldPrice: 110, newPrice: 120, currency: "USD", note: "Plus members' 2% Sam's Cash reward cap also rose, from $500 to $750/yr.", source: "https://www.cnbc.com/2026/04/01/sam.html" }
     ]
   },
   {
@@ -562,6 +563,187 @@ const SUBSCRIPTION_CATALOG = [
     id: "ynab", name: "YNAB (You Need A Budget)", category: "Finance", domain: "ynab.com",
     priceHistory: [
       { date: "2026-01-01", planLabel: "YNAB", oldPrice: null, newPrice: 14.99, annualPrice: 109, currency: "USD", note: "Annual works out to ~$9.08/mo. No confirmed prior change found.", source: "https://getfinny.app/blog/ynab-pricing-2026" }
+    ]
+  },
+  {
+    id: "twitch-turbo", name: "Twitch Turbo", category: "Video", domain: "twitch.tv",
+    priceHistory: [
+      { date: "2023-05-26", planLabel: "Turbo", oldPrice: 8.99, newPrice: 11.99, currency: "USD", note: "US price increase; Turbo removes ads platform-wide. No annual plan — monthly only.", source: "https://alternativeto.net/news/2023/5/twitch-raises-subscription-price-for-twitch-turbo-in-multiple-countries" }
+    ]
+  },
+  {
+    id: "discord-nitro", name: "Discord Nitro", category: "Communication", domain: "discord.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Nitro Basic", oldPrice: null, newPrice: 2.99, annualPrice: 29.99, currency: "USD", note: "Annual billing works out ~17% cheaper. No confirmed prior change found.", source: "https://pumble.com/discord-pricing" },
+      { date: "2026-01-01", planLabel: "Nitro", oldPrice: null, newPrice: 9.99, annualPrice: 99.99, currency: "USD", note: "", source: "https://pumble.com/discord-pricing" }
+    ]
+  },
+  {
+    id: "apple-arcade", name: "Apple Arcade", category: "Gaming", domain: "apple.com",
+    priceHistory: [
+      { date: "2019-09-19", planLabel: "Individual (Family Sharing included)", oldPrice: null, newPrice: 4.99, currency: "USD", note: "Apple Arcade launch price.", source: "https://www.techradar.com/news/apple-arcade-launches-on-september-19-for-dollar499-a-month" },
+      { date: "2023-10-25", planLabel: "Individual (Family Sharing included)", oldPrice: 4.99, newPrice: 6.99, annualPrice: 49.99, currency: "USD", note: "First price increase since 2019 launch; raised alongside Apple TV+ and Apple News+.", source: "https://www.macrumors.com/2023/10/25/apple-services-price-increases/" }
+    ]
+  },
+  {
+    id: "apple-news-plus", name: "Apple News+", category: "News & Reading", domain: "apple.com",
+    priceHistory: [
+      { date: "2023-10-25", planLabel: "Individual", oldPrice: 9.99, newPrice: 12.99, currency: "USD", note: "First price increase since Apple News+ launched in 2019; also included in Apple One Premier.", source: "https://www.macrumors.com/2023/10/25/apple-services-price-increases/" }
+    ]
+  },
+  {
+    id: "apple-fitness-plus", name: "Apple Fitness+", category: "Fitness", domain: "apple.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Individual (Family Sharing included)", oldPrice: null, newPrice: 9.99, annualPrice: 79.99, currency: "USD", note: "Current reference price; unchanged since 2020 launch as far as could be confirmed here.", source: "https://www.apple.com/apple-fitness-plus/" }
+    ]
+  },
+  {
+    id: "kindle-unlimited", name: "Amazon Kindle Unlimited", category: "News & Reading", domain: "amazon.com",
+    priceHistory: [
+      { date: "2023-01-01", planLabel: "Individual", oldPrice: 9.99, newPrice: 11.99, currency: "USD", note: "Exact 2023 date approximate.", source: "https://www.dealnews.com/features/kindle-unlimited/cost/" }
+    ]
+  },
+  {
+    id: "walmart-plus", name: "Walmart+", category: "Membership", domain: "walmart.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Walmart+", oldPrice: null, newPrice: 12.95, annualPrice: 98, currency: "USD", note: "Current reference price; discounted $49/yr rate exists for government-assistance recipients and students. No confirmed prior change found.", source: "https://www.walmart.com/help/article/walmart-membership/534c4edc29204a6bb15145a61146bf51" }
+    ]
+  },
+  {
+    id: "instacart-plus", name: "Instacart+", category: "Membership", domain: "instacart.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Instacart+", oldPrice: null, newPrice: 9.99, annualPrice: 99, currency: "USD", note: "Current reference price. No confirmed prior change found.", source: "https://www.instacart.com/instacart-plus" }
+    ]
+  },
+  {
+    id: "hellofresh", name: "HelloFresh", category: "Meal Kits", domain: "hellofresh.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Classic (2 people, 3 meals/wk)", oldPrice: null, newPrice: 9.99, currency: "USD", note: "Per-serving price for the most common plan size; a separate ~$10.99/wk shipping fee applies on top, and per-serving cost varies by plan size and promo. No confirmed prior change found.", source: "https://www.nerdwallet.com/finance/learn/how-much-does-hello-fresh-cost" }
+    ]
+  },
+  {
+    id: "fitbit-premium", name: "Fitbit Premium (Google Health Premium)", category: "Fitness", domain: "fitbit.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Premium (monthly)", oldPrice: null, newPrice: 9.99, currency: "USD", note: "Monthly price unchanged through the May 2026 rebrand of the Fitbit app to Google Health.", source: "https://www.androidauthority.com/google-health-premium-price-inclusions-features-3664507/" },
+      { date: "2026-05-19", planLabel: "Premium (annual)", oldPrice: 79.99, newPrice: 99.99, currency: "USD", note: "Announced May 7, 2026 alongside the Fitbit-to-Google-Health app rebrand.", source: "https://www.androidauthority.com/google-health-premium-price-inclusions-features-3664507/" }
+    ]
+  },
+  {
+    id: "whoop", name: "Whoop", category: "Fitness", domain: "whoop.com",
+    priceHistory: [
+      { date: "2025-05-01", planLabel: "WHOOP One", oldPrice: null, newPrice: 16.58, annualPrice: 199, currency: "USD", note: "Whoop sells annual memberships only (device included, no separate monthly plan) — figure here is a derived monthly-equivalent. Relaunched with this 3-tier lineup in May 2025; no US price change since.", source: "https://trackervs.com/pricing/whoop-pricing/" },
+      { date: "2025-05-01", planLabel: "WHOOP Peak", oldPrice: null, newPrice: 19.92, annualPrice: 239, currency: "USD", note: "Annual only, monthly-equivalent derived.", source: "https://trackervs.com/pricing/whoop-pricing/" },
+      { date: "2025-05-01", planLabel: "WHOOP Life", oldPrice: null, newPrice: 29.92, annualPrice: 359, currency: "USD", note: "Annual only, monthly-equivalent derived.", source: "https://trackervs.com/pricing/whoop-pricing/" }
+    ]
+  },
+  {
+    id: "classpass", name: "ClassPass", category: "Fitness", domain: "classpass.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Starter (varies by city)", oldPrice: null, newPrice: 19, currency: "USD", note: "Credit-based membership; price and included credits vary significantly by city (e.g. ~$19/mo entry tier in lower-cost markets, more in NYC/SF). No confirmed prior change found.", source: "https://www.exercise.com/grow/how-much-does-classpass-cost/" }
+    ]
+  },
+  {
+    id: "github-copilot", name: "GitHub Copilot", category: "AI Tools", domain: "github.com",
+    subscribers: { count: "4.7M", asOf: "Jan 28, 2026 (FY26 Q2 earnings)", note: "Paid subscribers, up ~75% year-over-year, per Microsoft's earnings disclosure.", source: "https://office365itpros.com/2026/01/30/microsoft-fy26-q2-results/" },
+    priceHistory: [
+      { date: "2026-06-01", planLabel: "Pro", oldPrice: null, newPrice: 10, currency: "USD", note: "Billing model changed June 2026 to \"GitHub AI Credits\" (replacing Premium Request Units); base subscription price unchanged.", source: "https://github.com/features/copilot/plans" },
+      { date: "2026-06-01", planLabel: "Pro+", oldPrice: null, newPrice: 39, currency: "USD", note: "Adds premium models like Claude Opus.", source: "https://github.com/features/copilot/plans" },
+      { date: "2026-01-01", planLabel: "Business (per user)", oldPrice: null, newPrice: 19, currency: "USD", note: "Current reference price for organizations; Enterprise tier is $39/user/mo.", source: "https://automationatlas.io/answers/github-copilot-pricing-explained-2026/" }
+    ]
+  },
+  {
+    id: "slack", name: "Slack", category: "Communication", domain: "slack.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Pro (per user, billed annually)", oldPrice: null, newPrice: 7.25, currency: "USD", note: "$8.75/mo if billed monthly; 3-user minimum. No confirmed prior change found.", source: "https://slack.com/pricing" },
+      { date: "2025-07-01", planLabel: "Business+ (per user, billed annually)", oldPrice: null, newPrice: 15, currency: "USD", note: "$18/mo if billed monthly. Advanced AI features were folded into this tier in July 2025, replacing a separate $10/user AI add-on.", source: "https://slack.com/pricing" }
+    ]
+  },
+  {
+    id: "figma", name: "Figma", category: "Software", domain: "figma.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Professional (Full seat)", oldPrice: null, newPrice: 16, currency: "USD", note: "Per editor/month, includes an AI credit pool; Dev seat is $12/mo, Collab seat $3/mo. No confirmed prior change found.", source: "https://www.figma.com/pricing/" }
+    ]
+  },
+  {
+    id: "asana", name: "Asana", category: "Productivity", domain: "asana.com",
+    priceHistory: [
+      { date: "2025-01-01", planLabel: "Starter (per user, billed annually)", oldPrice: null, newPrice: 10.99, currency: "USD", note: "$13.49/mo if billed monthly. The old \"Premium\" tier was retired and members moved to Starter during 2025.", source: "https://asana.com/pricing" },
+      { date: "2025-01-01", planLabel: "Advanced (per user, billed annually)", oldPrice: null, newPrice: 24.99, currency: "USD", note: "$30.49/mo if billed monthly.", source: "https://asana.com/pricing" }
+    ]
+  },
+  {
+    id: "zapier", name: "Zapier", category: "Software", domain: "zapier.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Professional (750 tasks, billed annually)", oldPrice: null, newPrice: 19.99, currency: "USD", note: "$29.99/mo if billed monthly; price rises with higher task tiers. No confirmed prior change found.", source: "https://zapier.com/pricing" },
+      { date: "2026-01-01", planLabel: "Team (2,000 tasks, billed annually)", oldPrice: null, newPrice: 69, currency: "USD", note: "$103.50/mo if billed monthly.", source: "https://zapier.com/pricing" }
+    ]
+  },
+  {
+    id: "malwarebytes", name: "Malwarebytes", category: "Security", domain: "malwarebytes.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Premium Standard (1 device, annual)", oldPrice: null, newPrice: 3.75, annualPrice: 44.99, currency: "USD", note: "Annual-only plan; monthly-equivalent derived. Plus tier is $79.99/yr, Ultimate is a $139.99/yr promo rate (renews at $279.99/yr). No confirmed prior change found.", source: "https://www.security.org/antivirus/malwarebytes/" }
+    ]
+  },
+  {
+    id: "norton-360", name: "Norton 360", category: "Security", domain: "norton.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "360 Deluxe (5 devices, 1st year)", oldPrice: null, newPrice: 10, annualPrice: 119.99, currency: "USD", note: "Official first-year listed price ($119.99/yr), annual-only; monthly-equivalent derived. Renewal price is higher but not disclosed on Norton's own pricing page. No confirmed prior change found.", source: "https://us.norton.com/products" }
+    ]
+  },
+  {
+    id: "mcafee-plus", name: "McAfee+", category: "Security", domain: "mcafee.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Total Protection (1st year)", oldPrice: null, newPrice: 3.33, annualPrice: 39.99, currency: "USD", note: "Annual-only, first-year intro price ($39.99/yr); monthly-equivalent derived. Renews around $84.99/yr. No confirmed prior change found.", source: "https://allaboutcookies.org/mcafee-antivirus-price" }
+    ]
+  },
+  {
+    id: "medium", name: "Medium", category: "News & Reading", domain: "medium.com",
+    priceHistory: [
+      { date: "2017-03-01", planLabel: "Member", oldPrice: null, newPrice: 5, annualPrice: 50, currency: "USD", note: "Price has held at $5/mo ($50/yr) since March 2017 per Medium's own membership page. A \"Friend of Medium\" tier also exists at $150/yr.", source: "https://medium.com/membership" }
+    ]
+  },
+  {
+    id: "blinkist", name: "Blinkist", category: "Education", domain: "blinkist.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Premium (annual)", oldPrice: null, newPrice: 7.49, annualPrice: 89.99, currency: "USD", note: "Monthly-only billing is $14.99/mo. A new \"Blinkist Pro\" tier (adds AI summarization) also launched in 2026 at ~$119.99/yr. No confirmed prior change found.", source: "https://makeheadway.com/blog/blinkist-cost/" }
+    ]
+  },
+  {
+    id: "curiositystream", name: "CuriosityStream", category: "Streaming", domain: "curiositystream.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Standard", oldPrice: null, newPrice: 4.99, annualPrice: 39.99, currency: "USD", note: "Smart Bundle tier is $9.99/mo ($69.99/yr) and adds partner-channel content. No confirmed prior change found.", source: "https://curiositystream.com/pricing" }
+    ]
+  },
+  {
+    id: "britbox", name: "BritBox", category: "Streaming", domain: "britbox.com",
+    priceHistory: [
+      { date: "2025-09-25", planLabel: "Standard", oldPrice: 8.99, newPrice: 10.99, annualPrice: 109.99, currency: "USD", note: "First significant US price increase since launch; also introduced a two-tier (Standard/Premier) structure.", source: "https://cordcuttersnews.com/britbox-announces-price-hike-for-subscriptions-starting-september-2025-but-subscribers-can-lock-in-the-current-rate-for-1-year-if-they-act-fast/" }
+    ]
+  },
+  {
+    id: "ancestry", name: "Ancestry", category: "Genealogy", domain: "ancestry.com",
+    priceHistory: [
+      { date: "2022-02-01", planLabel: "U.S. Discovery", oldPrice: null, newPrice: 24.99, currency: "USD", note: "Current reference monthly price, in place since a February 2022 pricing update; also sold in discounted 6-month blocks.", source: "https://www.groupon.com/coupons/blog/how-much-ancestry-really-costs" },
+      { date: "2022-02-01", planLabel: "World Explorer", oldPrice: null, newPrice: 39.99, currency: "USD", note: "Adds international records.", source: "https://www.groupon.com/coupons/blog/how-much-ancestry-really-costs" },
+      { date: "2022-02-01", planLabel: "All Access", oldPrice: null, newPrice: 49.99, currency: "USD", note: "Adds military records and newspaper archives.", source: "https://www.groupon.com/coupons/blog/how-much-ancestry-really-costs" }
+    ]
+  },
+  {
+    id: "tinder-platinum", name: "Tinder Platinum", category: "Dating", domain: "tinder.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Platinum (1-month)", oldPrice: null, newPrice: 49.99, currency: "USD", note: "Tinder uses dynamic per-user pricing by age/location; effective rate drops to $29.99/mo on a 6-month plan. Cheaper tiers: Tinder Gold $39.99/mo, Tinder Plus $24.99/mo. No confirmed prior change found.", source: "https://www.androidauthority.com/tinder-plus-gold-platinum-3236244/" }
+    ]
+  },
+  {
+    id: "bumble-premium", name: "Bumble Premium", category: "Dating", domain: "bumble.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Premium (1-month)", oldPrice: null, newPrice: 29.99, currency: "USD", note: "Pricing can vary by region/promo; 3-month and 6-month plans offer a lower effective rate. No confirmed prior change found.", source: "https://www.datingapps.com/cost/bumble/" }
+    ]
+  },
+  {
+    id: "grubhub-plus", name: "Grubhub+", category: "Membership", domain: "grubhub.com",
+    priceHistory: [
+      { date: "2026-01-01", planLabel: "Grubhub+", oldPrice: null, newPrice: 9.99, currency: "USD", note: "Free for Amazon Prime members. No confirmed prior change found.", source: "https://www.lowermysubs.com/blog/grubhub-plus-subscription-cost-worth-it-2026" }
     ]
   }
 ];
