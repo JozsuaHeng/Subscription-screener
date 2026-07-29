@@ -4,9 +4,9 @@
 
 **SubScreener** — a subscription price board, styled a bit like a stock/crypto
 screener (think CoinMarketCap), for subscription companies instead of
-coins. Full-width, sortable table of ~72 well-known subscription
-companies (streaming, music, software, gaming, fitness, etc), each row
-showing:
+coins. Full-width, sortable table of 100 well-known subscription
+companies (streaming, music, software, gaming, fitness, security, dating,
+meal kits, genealogy, and more), each row showing:
 
 - **Price** — every tracked plan/tier for that company (e.g. Netflix
   shows Standard-with-ads, Standard, and Premium as three lines, Peacock
@@ -224,10 +224,27 @@ too (for its logo). No other file needs to change. If a plan's official
 name is ambiguous, verify it rather than guessing — e.g. Disney+'s ad
 tier is officially "Disney+ Basic", not just "with ads".
 
-72 of a ~75-company target are in `data.js`. The last few weren't added
-on purpose: research ran out of confidently-sourced candidates rather
-than being cut off arbitrarily — padding the count with unverified
-numbers would violate the "never invent numbers" rule above. Two new
-categories arrived in this pass too: **AI Tools** (ChatGPT Plus,
-Perplexity Pro, Claude Pro — all converged on $20/mo) and **Finance**
-(Robinhood Gold, YNAB).
+100 companies are in `data.js` as of the July 2026 expansion pass, which
+also added four new categories that didn't fit anything existing:
+**Communication** (Discord Nitro, Slack), **Meal Kits** (HelloFresh),
+**Genealogy** (Ancestry), and **Dating** (Tinder Platinum, Bumble
+Premium). A few candidates were deliberately left out even during that
+push (e.g. Noom's fully quiz-personalized pricing, LegalZoom/Rocket
+Lawyer's inconsistent published figures) because no clean, confidently-
+sourced number could be cited without guessing — padding the count with
+unverified numbers would violate the "never invent numbers" rule above.
+Earlier passes added **AI Tools** (ChatGPT Plus, Perplexity Pro, Claude
+Pro — all converged on $20/mo) and **Finance** (Robinhood Gold, YNAB).
+
+`hikeDates()` in `app.js` (drives the Hike Frequency column, the
+"hikes most often" highlight, and the forecast estimate) only counts
+dates where at least one plan has a *confirmed* change (`oldPrice` not
+null) — a plan's current-reference snapshot landing close in time to a
+real hike on a sibling plan doesn't count as its own "touch." Worth
+remembering when adding a new confirmed change to a company that also
+has an untouched sibling plan still on a `oldPrice: null` reference
+entry: no action needed, this is handled automatically, but it's why an
+old reference entry that's now fully superseded by a confirmed change
+(same plan) should just be replaced rather than left duplicated
+alongside it — keeps the data itself clean even though the frequency
+math no longer depends on it.

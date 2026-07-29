@@ -167,11 +167,14 @@ function allTierPrices(company) {
   return tiers;
 }
 
-// Distinct dates the company touched pricing on any plan — used both for
-// the "how often does this company hike prices" summary and for the
-// estimated-forecast heuristic below.
+// Distinct dates the company made a *confirmed* change on any plan — used
+// both for the "how often does this company hike prices" summary and for
+// the estimated-forecast heuristic below. Filters out oldPrice:null entries
+// (current-reference points and new-plan launches, not an actual change)
+// so a plan's baseline snapshot landing close to a real hike on a sibling
+// plan doesn't get counted as its own "touch" and skew the interval down.
 function hikeDates(company) {
-  return [...new Set(company.priceHistory.map(h => h.date))].sort();
+  return [...new Set(company.priceHistory.filter(h => h.oldPrice != null).map(h => h.date))].sort();
 }
 
 function avgIntervalMonths(dates) {
