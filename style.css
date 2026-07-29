@@ -269,6 +269,30 @@ body {
   background: var(--card);
 }
 
+/* JS-driven "frozen header": a fixed-position clone of the real thead,
+   shown only once the real one has scrolled up under the topbar (see
+   initFrozenHeader() in app.js for why this can't just be CSS
+   position:sticky). Positioned/sized to exactly overlay where the table
+   would be, and its own scrollLeft is kept in sync with .table-scroll so
+   it moves together with the table during horizontal scroll — including
+   the frozen #/Company columns inside it, which stay pinned via the same
+   position:sticky;left rule as the real header (that part of sticky
+   positioning works fine, since this box's scrollLeft genuinely changes). */
+.frozen-header-wrap {
+  position: fixed;
+  overflow: hidden;
+  visibility: hidden;
+  z-index: 12;
+}
+.frozen-header-wrap.visible {
+  visibility: visible;
+}
+.frozen-header-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
 .board-table {
   width: 100%;
   min-width: 1440px;
@@ -283,12 +307,20 @@ body {
   font-size: 0.88rem;
 }
 
-/* top: 0 here means "top of .table-scroll's own box" — overflow-y:hidden
-   above makes .table-scroll the sticky positioning container again, so
-   this offset is relative to the table itself, not the page/topbar. */
+/* Deliberately NOT position:sticky here — confirmed (via an actual
+   scroll-wheel test, not just a screenshot) that it silently fails to
+   stick at all. Reason: .table-scroll has overflow-x:auto (needed so the
+   wide table scrolls sideways within its own box, see above), which makes
+   it the sticky positioning container for its descendants — but
+   .table-scroll never scrolls *vertically* on its own (no height cap, see
+   above), so it never has a changing scroll offset for position:sticky to
+   react to, and the header just scrolls away with everything else
+   instead of sticking. There's no plain-CSS way to get one page
+   scrollbar + horizontally-contained table scroll + a genuinely sticky
+   header all at once — the "frozen header" in initFrozenHeader() in
+   app.js does this instead: a cloned, fixed-position copy of this header
+   row that's shown/hidden and horizontally synced via a scroll listener. */
 .board-table thead th {
-  position: sticky;
-  top: 0;
   z-index: 3;
   background: var(--bg-raised);
   text-align: left;

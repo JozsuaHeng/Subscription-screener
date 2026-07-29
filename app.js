@@ -705,6 +705,90 @@ function buildCard(entry) {
   return { card, cardDetail };
 }
 
+// ---------- Frozen header ----------
+// A fixed-position clone of the real thead, shown once the real one has
+// scrolled up under the topbar. Exists because .table-scroll needs
+// overflow-x:auto (so the wide table scrolls sideways within its own box,
+// not the whole page — see style.css), which makes .table-scroll the
+// sticky positioning container for its descendants; but .table-scroll
+// never scrolls vertically on its own, so it has no changing scroll
+// offset for a plain position:sticky header to react to, and one never
+// sticks. Confirmed via an actual scroll-wheel test (a screenshot taken
+// right after a scripted window.scrollTo() turned out to render
+// unreliably and can't be trusted for this). This clone sidesteps it by
+// tracking the real header's position with a scroll listener instead.
+let frozenHeaderWrap = null;
+let frozenHeaderTable = null;
+
+function initFrozenHeader() {
+  const tableScroll = document.querySelector(".table-scroll");
+  const realTable = document.querySelector(".board-table");
+  if (!tableScroll || !realTable) return;
+
+  frozenHeaderWrap = document.createElement("div");
+  frozenHeaderWrap.className = "frozen-header-wrap";
+  frozenHeaderWrap.setAttribute("aria-hidden", "true");
+
+  frozenHeaderTable = document.createElement("table");
+  frozenHeaderTable.className = "board-table frozen-header-table";
+  frozenHeaderTable.appendChild(realTable.querySelector("thead").cloneNode(true));
+  frozenHeaderWrap.appendChild(frozenHeaderTable);
+  document.body.appendChild(frozenHeaderWrap);
+
+  window.addEventListener("scroll", updateFrozenHeaderVisibility, { passive: true });
+  window.addEventListener("resize", syncFrozenHeaderMetrics);
+  tableScroll.addEventListener("scroll", syncFrozenHeaderScroll, { passive: true });
+
+  syncFrozenHeaderMetrics();
+}
+
+// Re-measures column widths and the wrap's position/size. Needed after
+// any render that could change column widths (table-layout is auto on
+// the real table, so filtering down to fewer/narrower companies can
+// shift them) — call after renderTable(), not just once at load.
+function syncFrozenHeaderMetrics() {
+  if (!frozenHeaderWrap) return;
+  const tableScroll = document.querySelector(".table-scroll");
+  const realTable = document.querySelector(".board-table:not(.frozen-header-table)");
+  if (!tableScroll || !realTable) return;
+
+  const realThs = realTable.querySelectorAll("thead th");
+  const cloneThs = frozenHeaderTable.querySelectorAll("th");
+  if (realThs.length !== cloneThs.length) return;
+
+  const rect = tableScroll.getBoundingClientRect();
+  frozenHeaderWrap.style.left = `${rect.left}px`;
+  frozenHeaderWrap.style.width = `${rect.width}px`;
+  frozenHeaderTable.style.width = `${realTable.getBoundingClientRect().width}px`;
+  realThs.forEach((th, i) => { cloneThs[i].style.width = `${th.getBoundingClientRect().width}px`; });
+
+  syncFrozenHeaderScroll();
+  updateFrozenHeaderVisibility();
+}
+
+function syncFrozenHeaderScroll() {
+  if (!frozenHeaderWrap) return;
+  const tableScroll = document.querySelector(".table-scroll");
+  frozenHeaderWrap.scrollLeft = tableScroll.scrollLeft;
+}
+
+function updateFrozenHeaderVisibility() {
+  if (!frozenHeaderWrap) return;
+  const tableScroll = document.querySelector(".table-scroll");
+  if (!tableScroll || getComputedStyle(tableScroll).display === "none") {
+    frozenHeaderWrap.classList.remove("visible");
+    return;
+  }
+  const topbarHeight = document.querySelector(".topbar").getBoundingClientRect().height;
+  const rect = tableScroll.getBoundingClientRect();
+  // Shown once the real header has scrolled up under the topbar, hidden
+  // again once the table itself has scrolled almost entirely out of view
+  // (so it doesn't float over the empty space below the table).
+  const shouldShow = rect.top <= topbarHeight && rect.bottom > topbarHeight + 40;
+  frozenHeaderWrap.style.top = `${topbarHeight}px`;
+  frozenHeaderWrap.classList.toggle("visible", shouldShow);
+}
+
 function renderTable() {
   const tbody = document.getElementById("companyTableBody");
   const cardList = document.getElementById("companyCardList");
@@ -747,6 +831,8 @@ function renderTable() {
     cardList.appendChild(card);
     cardList.appendChild(cardDetail);
   });
+
+  syncFrozenHeaderMetrics();
 }
 
 function renderDetailContent(company) {
@@ -830,17 +916,21 @@ document.getElementById("recentFilterBtn").addEventListener("click", (e) => {
   renderTable();
 });
 
-document.querySelectorAll("th.sortable").forEach(th => {
-  th.addEventListener("click", () => {
-    const col = th.dataset.sort;
-    if (sortColumn === col) {
-      sortDir = sortDir === "asc" ? "desc" : "asc";
-    } else {
-      sortColumn = col;
-      sortDir = col === "name" ? "asc" : "desc";
-    }
-    renderTable();
-  });
+// Delegated (not bound per-th) because the frozen header in
+// initFrozenHeader() below is a clone of these th's added later —
+// cloneNode() copies markup, not listeners, so a direct per-element
+// binding here would silently miss clicks on the frozen copy.
+document.addEventListener("click", (e) => {
+  const th = e.target.closest("th.sortable");
+  if (!th) return;
+  const col = th.dataset.sort;
+  if (sortColumn === col) {
+    sortDir = sortDir === "asc" ? "desc" : "asc";
+  } else {
+    sortColumn = col;
+    sortDir = col === "name" ? "asc" : "desc";
+  }
+  renderTable();
 });
 
 document.getElementById("themeToggle").addEventListener("click", () => {
@@ -867,3 +957,4 @@ document.getElementById("themeToggle").addEventListener("click", () => {
 renderCategoryChips();
 renderHighlights();
 renderTable();
+initFrozenHeader();

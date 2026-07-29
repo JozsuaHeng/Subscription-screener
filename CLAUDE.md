@@ -64,10 +64,12 @@ public favicon service (`logoUrl()` in `app.js`) — not a hosted image
 asset. If it fails to load, it's removed and the colored-initial avatar
 underneath shows through automatically.
 
-The **#** and **Company** columns are frozen (`position: sticky`) so
-they stay in view while you scroll horizontally through the rest of the
-(wide) table — you never lose track of which row you're looking at. The
-column **header row** is also frozen while scrolling vertically.
+The **#** and **Company** columns are frozen (`position: sticky; left:
+...`) so they stay in view while you scroll horizontally through the rest
+of the (wide) table — you never lose track of which row you're looking
+at. This part works via plain CSS, because `.table-scroll` (see below)
+genuinely does scroll horizontally on its own, which is exactly what
+`position: sticky` needs to track.
 
 There is deliberately only **one *vertical* scrollbar for the whole
 site** (the page itself) — but the wide table still scrolls
@@ -78,19 +80,35 @@ scrolls sideways) plus `overflow-y: hidden` with **no** height/max-height
 of its own, so it always grows to fit every row — nothing is ever
 actually clipped vertically, that axis is just pinned to a non-`visible`
 value so the browser doesn't treat this box as an *ambiguous* scrolling
-ancestor. That ambiguity (an element with `overflow-x: auto` but
-`overflow-y` left at the default `visible`, which the CSS overflow spec
-silently force-promotes to `auto` too) is what caused a real, confirmed
-browser bug earlier in this project: `position: sticky` on a `<th>`
-inside an ambiguous scrolling ancestor can collapse that row's height to
-0 while still painting its content, overlapping row 1 instead of sitting
-above it. Making both axes explicit (`auto` + `hidden`, never one left
-implicit) avoids that. Because `.table-scroll` is a real (if invisibly
-so) scroll container again, `top: 0` on `thead th` means "top of the
-table's own box," not the page — and the **frozen `#`/Company columns**
-(`left: 0` sticky) pin correctly against *this* box's horizontal scroll
-too, which is exactly what keeps them in view while scrolling sideways
-through the rest of the table.
+ancestor (an element with `overflow-x: auto` but `overflow-y` left at the
+default `visible` gets that axis silently force-promoted to `auto` too,
+which caused a real, confirmed browser bug earlier in this project:
+`position: sticky` on a `<th>` inside such an ambiguous ancestor can
+collapse that row's height to 0 while still painting its content,
+overlapping row 1 instead of sitting above it).
+
+The **header row** is a different story, and does *not* use
+`position: sticky` — confirmed, via an actual scroll-wheel test (a
+screenshot taken right after a scripted `window.scrollTo()` turned out to
+render unreliably and can't be trusted for verifying scroll behavior),
+that it silently fails to stick at all. The reason: `.table-scroll`'s `overflow-x: auto` makes it the
+sticky positioning container for its descendants, but since
+`.table-scroll` never scrolls *vertically* on its own (no height cap —
+see above), it never has a changing scroll offset for a sticky header to
+react to. There is no plain-CSS way to have one page scrollbar +
+horizontally-contained table scroll + a genuinely sticky header all at
+once. Instead, `initFrozenHeader()` in `app.js` builds a **JS-driven
+frozen header**: a cloned, fixed-position copy of the header row that's
+shown only once the real one has scrolled up under the topbar, with its
+own `scrollLeft` kept in sync with `.table-scroll` (so it moves together
+during horizontal scroll, including the frozen `#`/Company columns inside
+it, via the same `position: sticky; left` rule as the real header) and
+its column widths kept in sync after every render (since the real
+table's `table-layout: auto` can shift column widths when filtering
+changes what's visible). The sortable-column click handler is delegated
+(bound to `document`, not to each `th` directly) specifically so it
+still works on this cloned copy — `cloneNode()` copies markup, not
+listeners.
 
 A **"🔥 Changed in last 90 days"** button next to the search box quick-
 filters the board down to companies with a tracked change inside that
