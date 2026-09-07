@@ -103,7 +103,10 @@ const SUBSCRIPTION_CATALOG = [
       { date: "2023-08-17", planLabel: "Premium Plus (no ads)", oldPrice: 9.99, newPrice: 11.99, currency: "USD", note: "", source: "https://deadline.com/2023/07/peacock-raising-prices-first-time-since-2020-launch-nbcuniversal-streaming-1235440147/" },
       { date: "2026-01-01", planLabel: "Premium (with ads)", oldPrice: null, newPrice: 10.99, annualPrice: 109.99, currency: "USD", note: "Current reference price; increases between 2023 and 2026 not individually confirmed.", source: "https://www.tomsguide.com/news/peacock-price-hike-just-announced-heres-how-much-more-youll-pay" },
       { date: "2026-01-01", planLabel: "Premium Plus (no ads)", oldPrice: null, newPrice: 16.99, annualPrice: 169.99, currency: "USD", note: "Current reference price; Peacock said it would hold pricing steady into 2026.", source: "https://www.tomsguide.com/news/peacock-price-hike-just-announced-heres-how-much-more-youll-pay" },
-      { date: "2026-01-01", planLabel: "Select", oldPrice: null, newPrice: 7.99, annualPrice: 79.99, currency: "USD", note: "Newest, cheapest tier — no prior price to compare.", source: "https://www.tomsguide.com/news/peacock-price-hike-just-announced-heres-how-much-more-youll-pay" }
+      { date: "2026-01-01", planLabel: "Select", oldPrice: null, newPrice: 7.99, annualPrice: 79.99, currency: "USD", note: "Newest, cheapest tier — no prior price to compare.", source: "https://www.tomsguide.com/news/peacock-price-hike-just-announced-heres-how-much-more-youll-pay" },
+      { date: "2026-08-18", planLabel: "Select", oldPrice: 7.99, newPrice: 8.99, annualPrice: 89.99, currency: "USD", note: "Fourth Peacock price increase in four years. New/returning subscribers immediately; existing subscribers on their first billing date on or after Sept 17, 2026.", source: "https://www.tvline.com/2238983/peacock-price-increase-august-2026-subscription-cost/" },
+      { date: "2026-08-18", planLabel: "Premium (with ads)", oldPrice: 10.99, newPrice: 12.99, annualPrice: 129.99, currency: "USD", note: "", source: "https://www.tvline.com/2238983/peacock-price-increase-august-2026-subscription-cost/" },
+      { date: "2026-08-18", planLabel: "Premium Plus (no ads)", oldPrice: 16.99, newPrice: 19.99, annualPrice: 199.99, currency: "USD", note: "Largest increase of the three tiers, $3/mo.", source: "https://www.tvline.com/2238983/peacock-price-increase-august-2026-subscription-cost/" }
     ]
   },
   {
@@ -141,7 +144,9 @@ const SUBSCRIPTION_CATALOG = [
   {
     id: "espn", name: "ESPN", category: "Live TV", domain: "espn.com",
     priceHistory: [
-      { date: "2026-01-01", planLabel: "ESPN Unlimited", oldPrice: null, newPrice: 29.99, currency: "USD", note: "Current reference price for ESPN's direct-to-consumer streaming tier. No confirmed prior change found.", source: "https://www.pcworld.com/article/582896/best-streaming-tv-service.html" }
+      { date: "2026-01-01", planLabel: "ESPN Unlimited", oldPrice: null, newPrice: 29.99, currency: "USD", note: "Current reference price for ESPN's direct-to-consumer streaming tier. No confirmed prior change found.", source: "https://www.pcworld.com/article/582896/best-streaming-tv-service.html" },
+      { date: "2026-09-17", planLabel: "ESPN Unlimited", oldPrice: 29.99, newPrice: 31.99, annualPrice: 319.99, currency: "USD", note: "First price increase since the direct-to-consumer tier launched. Subscribed before Aug 20, 2026 keeps old price until first billing date on/after Sept 17.", source: "https://whatsondisneyplus.com/espn-unlimited-espn-select-to-increase-prices/" },
+      { date: "2026-09-17", planLabel: "ESPN Select", oldPrice: 12.99, newPrice: 13.99, annualPrice: 139.99, currency: "USD", note: "Scaled-down tier's first tracked price point and first confirmed change, same rollout as ESPN Unlimited above.", source: "https://whatsondisneyplus.com/espn-unlimited-espn-select-to-increase-prices/" }
     ]
   },
   {
@@ -169,7 +174,8 @@ const SUBSCRIPTION_CATALOG = [
   {
     id: "apple-tv-plus", name: "Apple TV+", category: "Streaming", domain: "apple.com",
     priceHistory: [
-      { date: "2025-08-01", planLabel: "Standard", oldPrice: 9.99, newPrice: 12.99, currency: "USD", note: "", source: "https://deadline.com/2026/07/apple-increases-prices-music-one-subscriptions-1236997295/" }
+      { date: "2025-08-01", planLabel: "Standard", oldPrice: 9.99, newPrice: 12.99, currency: "USD", note: "", source: "https://deadline.com/2026/07/apple-increases-prices-music-one-subscriptions-1236997295/" },
+      { date: "2026-08-28", planLabel: "Standard", oldPrice: 12.99, newPrice: 14.99, annualPrice: 119, currency: "USD", note: "Fourth Apple TV price increase in four years; annual plan rose from $99 to $119. Existing subscribers notified ~1 month before being charged.", source: "https://deadline.com/2026/08/apple-tv-raises-rates-monthly-annual-plans-1237061804/" }
     ]
   },
   {
@@ -249,7 +255,8 @@ const SUBSCRIPTION_CATALOG = [
     id: "apple-one", name: "Apple One", category: "Bundle", domain: "apple.com",
     priceHistory: [
       { date: "2026-07-17", planLabel: "Family", oldPrice: 25.95, newPrice: 27.95, currency: "USD", note: "Individual tier unchanged at $19.95.", source: "https://deadline.com/2026/07/apple-increases-prices-music-one-subscriptions-1236997295/" },
-      { date: "2026-07-17", planLabel: "Premier", oldPrice: 37.95, newPrice: 39.95, currency: "USD", note: "", source: "https://deadline.com/2026/07/apple-increases-prices-music-one-subscriptions-1236997295/" }
+      { date: "2026-07-17", planLabel: "Premier", oldPrice: 37.95, newPrice: 39.95, currency: "USD", note: "", source: "https://deadline.com/2026/07/apple-increases-prices-music-one-subscriptions-1236997295/" },
+      { date: "2026-08-28", planLabel: "Individual", oldPrice: 19.95, newPrice: 21.95, currency: "USD", note: "Individual tier's first tracked change — untouched by the July 2026 hike to Family/Premier. Same day as the Apple TV+ increase.", source: "https://www.cnbc.com/2026/08/28/apple-tv-one-price-hike-us.html" }
     ]
   },
   {
